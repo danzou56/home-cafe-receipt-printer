@@ -4,10 +4,11 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-python-escpos = "*"
+python-escpos = { version = "~=3.1", extras = ["usb", "cups"] }
 
 [dev-packages]
 black = "*"
+pytest = "*"
 
 [requires]
 python_version = "3.12"
