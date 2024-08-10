@@ -1,0 +1,4 @@
+printer:
+  type: Usb
+  idVendor: 0x0fe6
+  idProduct: 0x811e
