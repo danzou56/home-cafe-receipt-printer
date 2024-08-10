@@ -27,4 +27,5 @@ class PrintService:
                 [Text(item.name)] + PrintService._parse_items(item.sub_items)
                 for item in items
             ],
+            [],
         )
