@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 python-escpos = { version = "~=3.1", extras = ["usb", "cups"] }
 flask = "~=3.0"
+python-dotenv = "~=1.0"
 
 [dev-packages]
 black = "*"

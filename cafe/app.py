@@ -1,18 +1,25 @@
 import logging
+import os
 
+from dotenv import load_dotenv
+from escpos.printer import Dummy
 from escpos.config import Config
 from escpos.escpos import Escpos
-from escpos.printer import Dummy
 from flask import Flask, request
 
 from cafe.order.Order import Order
 from cafe.printer.PrintClient import PrintClient
 from cafe.printer.PrintService import PrintService
 
-# print_service = PrintService(PrintClient(Dummy()))
-c = Config()
-c.load("cafe/printer/config.yaml")
-raw_printer: Escpos = c.printer()
+load_dotenv()
+
+if os.getenv("PRINTER") == "sidewalk":
+    c = Config()
+    c.load("cafe/printer/config.yaml")
+    raw_printer: Escpos = c.printer()
+else:
+    raw_printer: Escpos = Dummy()
+
 print_service = PrintService(PrintClient(raw_printer))
 
 logger = logging.getLogger(__name__)
@@ -22,7 +29,7 @@ app = Flask(__name__)
 
 @app.route("/health-check")
 def hello_world():
-    return "<p>Hello, World!</p>"
+    return "Hello, World!"
 
 
 @app.route("/order", methods=["POST"])
