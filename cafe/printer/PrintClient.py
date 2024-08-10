@@ -1,6 +1,6 @@
 from escpos.escpos import Escpos
 
-from command.Command import Command
+from cafe.printer.command.Command import Command
 
 
 class PrintClient:

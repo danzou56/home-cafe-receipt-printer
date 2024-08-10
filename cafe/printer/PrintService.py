@@ -1,10 +1,10 @@
 from functools import reduce
 
 from PrintClient import PrintClient
-from cafe.order.Order import Order
 from cafe.order.Item import Item
-from command.Text import Text
-from command.Command import Command
+from cafe.order.Order import Order
+from cafe.printer.command.Command import Command
+from cafe.printer.command.Text import Text
 
 
 class PrintService:

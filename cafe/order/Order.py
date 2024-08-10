@@ -1,7 +1,7 @@
 import datetime
 from dataclasses import dataclass
 
-from Item import Item
+from cafe.order.Item import Item
 
 
 @dataclass

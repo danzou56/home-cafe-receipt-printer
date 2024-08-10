@@ -3,9 +3,9 @@ from escpos.escpos import Escpos
 from escpos.printer import Dummy
 from flask import Flask, request
 
-from order.Order import Order
-from printer.PrintClient import PrintClient
-from printer.PrintService import PrintService
+from cafe.order.Order import Order
+from cafe.printer.PrintClient import PrintClient
+from cafe.printer.PrintService import PrintService
 
 # print_service = PrintService(PrintClient(Dummy()))
 c = Config()
