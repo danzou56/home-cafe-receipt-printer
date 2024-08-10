@@ -1,3 +1,5 @@
+import logging
+
 from escpos.config import Config
 from escpos.escpos import Escpos
 from escpos.printer import Dummy
@@ -13,6 +15,8 @@ c.load("cafe/printer/config.yaml")
 raw_printer: Escpos = c.printer()
 print_service = PrintService(PrintClient(raw_printer))
 
+logger = logging.getLogger(__name__)
+
 app = Flask(__name__)
 
 
@@ -27,8 +31,10 @@ def order():
     try:
         order = Order.from_dict(content)
     except KeyError as e:
+        logger.error(e)
         return "Bad Request", 400
     except TypeError as e:
+        logger.error(e)
         return "Bad Request", 400
     print_service.print(order)
     return "", 201
