@@ -1,3 +1,4 @@
+import collections
 import os
 from functools import reduce
 
@@ -40,7 +41,9 @@ class PrintService:
             ),
             Break(),
         ]
-        body = PrintService._parse_top_items(order.items)
+        body = PrintService._parse_top_items(
+            list(collections.Counter(order.items).items())
+        )
 
         return header + info + body + [Break()]
 

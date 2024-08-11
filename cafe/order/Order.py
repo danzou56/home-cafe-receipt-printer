@@ -9,16 +9,12 @@ from cafe.order.Item import Item
 class Order:
     name: str
     timestamp: datetime.datetime
-    items: list[(int, Item)]
+    items: list[Item]
 
     @staticmethod
     def from_dict(data: dict):
         return Order(
             data["name"],
             datetime.datetime.now(),
-            list(
-                collections.Counter(
-                    Item.from_dict(item) for item in data["items"]
-                ).items()
-            ),
+            [Item.from_dict(item) for item in data["items"]],
         )
