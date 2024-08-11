@@ -10,7 +10,8 @@ python-dotenv = "~=1.0"
 
 [dev-packages]
 black = "*"
-pytest = "*"
+pytest = "~=8.3"
+mypy = "~=1.11"
 
 [requires]
 python_version = "3.12"
