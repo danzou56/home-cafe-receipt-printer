@@ -13,14 +13,16 @@ from cafe.printer.PrintService import PrintService
 
 load_dotenv()
 
+raw_printer: Escpos
 if os.getenv("PRINTER") == "sidewalk":
     c = Config()
     c.load("cafe/printer/config.yaml")
-    raw_printer: Escpos = c.printer()
+    raw_printer = c.printer()
 else:
-    raw_printer: Escpos = Dummy()
+    raw_printer = Dummy()
 
-print_service = PrintService(PrintClient(raw_printer))
+print_client = PrintClient(raw_printer)
+print_service = PrintService(print_client)
 
 logger = logging.getLogger(__name__)
 
@@ -43,5 +45,5 @@ def order():
     except TypeError as e:
         logger.error(e)
         return "Bad Request", 400
-    print_service.print(order)
+    print_client.print(print_service.parse_order(order))
     return "", 201

@@ -17,11 +17,11 @@ class PrintService:
         self.__client = print_client
 
     def print(self, order: Order):
-        commands = PrintService._parse_order(order)
+        commands = PrintService.parse_order(order)
         self.__client.print(commands)
 
     @classmethod
-    def _parse_order(cls, order: Order) -> list[Command]:
+    def parse_order(cls, order: Order) -> list[Command]:
         cls._order_number += 1
 
         header = [
@@ -45,22 +45,22 @@ class PrintService:
             list(collections.Counter(order.items).items())
         )
 
-        return header + info + body + [Break()]
+        return header + info + body + [Break(), Break()]
 
     @staticmethod
-    def _parse_top_items(items: list[(int, Item)]) -> list[Command]:
+    def _parse_top_items(items: list[tuple[Item, int]]) -> list[Command]:
         return reduce(
             list.__add__,
             [
                 [TextLn(f"{quantity} x  {item.name}")]
                 + PrintService._parse_items(item.sub_items, 1)
-                for (quantity, item) in items
+                for (item, quantity) in items
             ],
             [],
         )
 
     @staticmethod
-    def _parse_items(items: list[Item], indentation: int = 0) -> list[Command]:
+    def _parse_items(items: tuple[Item, ...], indentation: int = 0) -> list[Command]:
         return reduce(
             list.__add__,
             [
