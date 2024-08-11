@@ -1,3 +1,4 @@
+import collections
 import datetime
 from dataclasses import dataclass
 
@@ -15,8 +16,9 @@ class Order:
         return Order(
             data["name"],
             datetime.datetime.now(),
-            [
-                (int(quantity), Item.from_dict(item))
-                for (quantity, item) in data["items"]
-            ],
+            list(
+                collections.Counter(
+                    Item.from_dict(item) for item in data["items"]
+                ).items()
+            ),
         )
