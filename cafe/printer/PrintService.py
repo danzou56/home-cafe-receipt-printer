@@ -30,22 +30,38 @@ class PrintService:
             Break(),
         ]
         info = [
-            TextLn(f"Order for: {order.name}", align="center"),
             TextLn(
-                f"{order.timestamp.strftime("%m/%d/%Y %I:%M:%S %p")} / #{cls._order_number}"
+                f"{order.name.upper()}",
+                double_height=True,
+                double_width=True,
+            ),
+            TextLn(
+                f"{order.timestamp.strftime('%m/%d/%Y %I:%M:%S %p')} / #{cls._order_number}"
             ),
             Break(),
         ]
-        body = PrintService._parse_items(order.items)
+        body = PrintService._parse_top_items(order.items)
 
         return header + info + body + [Break()]
+
+    @staticmethod
+    def _parse_top_items(items: list[(int, Item)]) -> list[Command]:
+        return reduce(
+            list.__add__,
+            [
+                [TextLn(f"{quantity} x  {item.name}")]
+                + PrintService._parse_items(item.sub_items, 1)
+                for (quantity, item) in items
+            ],
+            [],
+        )
 
     @staticmethod
     def _parse_items(items: list[Item], indentation: int = 0) -> list[Command]:
         return reduce(
             list.__add__,
             [
-                [TextLn(("\t" * indentation) + item.name)]
+                [TextLn(f"{'\t' * indentation}{item.name}")]
                 + PrintService._parse_items(item.sub_items, indentation + 1)
                 for item in items
             ],

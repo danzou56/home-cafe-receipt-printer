@@ -8,12 +8,15 @@ from cafe.order.Item import Item
 class Order:
     name: str
     timestamp: datetime.datetime
-    items: list[Item]
+    items: list[(int, Item)]
 
     @staticmethod
     def from_dict(data: dict):
         return Order(
             data["name"],
             datetime.datetime.now(),
-            [Item.from_dict(item) for item in data["items"]],
+            [
+                (int(quantity), Item.from_dict(item))
+                for (quantity, item) in data["items"]
+            ],
         )
