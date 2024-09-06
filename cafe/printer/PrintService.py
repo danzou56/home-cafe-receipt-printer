@@ -25,7 +25,7 @@ class PrintService:
         cls._order_number += 1
 
         header = [
-            TextLn("Allicafei", align="center", double_height=True, double_width=True),
+            TextLn("allicafei", align="center", double_height=True, double_width=True),
             TextLn(os.getenv("PRIVATE_LINE_1", ""), align="center"),
             TextLn(os.getenv("PRIVATE_LINE_2", ""), align="center"),
             Break(),
