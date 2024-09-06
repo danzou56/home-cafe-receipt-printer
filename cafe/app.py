@@ -6,6 +6,7 @@ from escpos.printer import Dummy
 from escpos.config import Config
 from escpos.escpos import Escpos
 from flask import Flask, request
+from flask_cors import cross_origin
 
 from cafe.order.Order import Order
 from cafe.printer.PrintClient import PrintClient
@@ -30,6 +31,7 @@ app = Flask(__name__)
 
 
 @app.route("/health-check")
+@cross_origin()
 def hello_world():
     return "Hello, World!"
 
