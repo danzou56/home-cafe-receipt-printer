@@ -25,7 +25,7 @@ class PrintService:
         cls._order_number += 1
 
         header = [
-            TextLn("Home Cafe", align="center", double_height=True, double_width=True),
+            TextLn("Allicafei", align="center", double_height=True, double_width=True),
             TextLn(os.getenv("PRIVATE_LINE_1", ""), align="center"),
             TextLn(os.getenv("PRIVATE_LINE_2", ""), align="center"),
             Break(),
@@ -52,7 +52,13 @@ class PrintService:
         return reduce(
             list.__add__,
             [
-                [TextLn(f"{quantity} x  {item.name}")]
+                [
+                    TextLn(
+                        f"{quantity} x  {item.name}",
+                        double_height=True,
+                        double_width=True,
+                    )
+                ]
                 + PrintService._parse_items(item.sub_items, 1)
                 for (item, quantity) in items
             ],
