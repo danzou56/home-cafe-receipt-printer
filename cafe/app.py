@@ -39,11 +39,11 @@ def hello_world():
 @app.route("/order", methods=["POST"])
 @cross_origin()
 def order():
-    logger.error(f"Request: {request.data}")
+    logger.info(f"Request: {request.data}")
     content = request.json
-    logger.info(content)
     try:
         order = Order.from_dict(content)
+        logger.info(f"Order: {order}")
     except KeyError as e:
         logger.error(e)
         return "Bad Request", 400
