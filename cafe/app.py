@@ -40,6 +40,7 @@ def hello_world():
 @cross_origin()
 def order():
     content = request.json
+    logger.info(content)
     try:
         order = Order.from_dict(content)
     except KeyError as e:
