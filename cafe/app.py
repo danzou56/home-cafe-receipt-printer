@@ -39,6 +39,7 @@ def hello_world():
 @app.route("/order", methods=["POST"])
 @cross_origin()
 def order():
+    logger.info(request.data)
     content = request.json
     logger.info(content)
     try:
