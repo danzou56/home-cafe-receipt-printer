@@ -50,7 +50,7 @@ def order():
     except TypeError as e:
         logger.error(e)
         return "Bad Request", 400
-    print_client.print(print_service.parse_order(order))
+    print_service.print(order)
     return "", 201
 
 
