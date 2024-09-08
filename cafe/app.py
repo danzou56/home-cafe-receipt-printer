@@ -6,7 +6,7 @@ from escpos.printer import Dummy
 from escpos.config import Config
 from escpos.escpos import Escpos
 from flask import Flask, request
-from flask_cors import cross_origin
+from flask_cors import cross_origin, CORS
 
 from cafe.order.Order import Order
 from cafe.printer.PrintClient import PrintClient
@@ -28,16 +28,15 @@ print_service = PrintService(print_client)
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
+CORS(app, resources=["192.168.1.*", "*.local"])
 
 
 @app.route("/health-check")
-@cross_origin()
 def hello_world():
     return "Hello, World!"
 
 
 @app.route("/order", methods=["POST"])
-@cross_origin()
 def order():
     logger.info(f"Request: {request.data}")
     content = request.json
