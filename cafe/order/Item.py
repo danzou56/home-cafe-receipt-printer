@@ -13,3 +13,9 @@ class Item:
             data["name"],
             tuple(Item.from_dict(sub_item) for sub_item in data.get("sub_items", [])),
         )
+
+    def to_dict(self) -> dict:
+        return {
+            "name": self.name,
+            "sub_items": tuple(sub_item.to_dict() for sub_item in self.sub_items),
+        }
