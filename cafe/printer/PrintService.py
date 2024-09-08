@@ -1,5 +1,6 @@
 import collections
 import os
+import uuid
 from functools import reduce
 
 from cafe.order.Item import Item
@@ -12,12 +13,14 @@ from cafe.printer.command.TextLn import TextLn
 
 class PrintService:
     _order_number = 0
+    orders: dict[str, Order] = dict()
 
     def __init__(self, print_client: PrintClient):
         self.__client = print_client
 
     def print(self, order: Order):
         commands = PrintService.parse_order(order)
+        self.orders[str(uuid.uuid4())] = order
         self.__client.print(commands)
 
     @classmethod

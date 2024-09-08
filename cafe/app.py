@@ -1,3 +1,4 @@
+import json
 import logging
 import os
 
@@ -51,3 +52,8 @@ def order():
         return "Bad Request", 400
     print_client.print(print_service.parse_order(order))
     return "", 201
+
+
+@app.route("/orders", methods=["GET"])
+def get_orders():
+    return json.dumps(print_service.orders), 200
