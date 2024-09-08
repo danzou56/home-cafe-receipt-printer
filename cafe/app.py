@@ -28,7 +28,7 @@ print_service = PrintService(print_client)
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
-CORS(app, origins=["192\\.168\\.1\\.\\d{1,3}", ".*\\.local", "localhost"])
+CORS(app)
 
 
 @app.route("/health-check")
