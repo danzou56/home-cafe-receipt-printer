@@ -1,13 +1,13 @@
-import json
+import logging
 import logging
 import os
 
 from dotenv import load_dotenv
-from escpos.printer import Dummy
 from escpos.config import Config
 from escpos.escpos import Escpos
+from escpos.printer import Dummy
 from flask import Flask, request
-from flask_cors import cross_origin, CORS
+from flask_cors import CORS
 
 from cafe.order.Order import Order
 from cafe.printer.PrintClient import PrintClient
@@ -50,10 +50,19 @@ def order():
     except TypeError as e:
         logger.error(e)
         return "Bad Request", 400
-    print_service.print(order)
-    return "", 201
+    order_id = print_service.print(order)
+    return order_id, 201
 
 
 @app.route("/orders", methods=["GET"])
 def get_orders():
     return print_service.orders, 200
+
+
+@app.route("/reprint/<id>", methods=["POST"])
+def reprint(order_id):
+    try:
+        print_service.print(print_service.orders.get(order_id))
+    except KeyError as e:
+        return "No such order ID", 400
+    return order_id, 200

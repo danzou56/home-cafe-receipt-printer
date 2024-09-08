@@ -18,10 +18,12 @@ class PrintService:
     def __init__(self, print_client: PrintClient):
         self.__client = print_client
 
-    def print(self, order: Order):
+    def print(self, order: Order) -> str:
         commands = PrintService.parse_order(order)
-        self.orders[str(uuid.uuid4())] = order
+        order_id = str(uuid.uuid4())
+        self.orders[order_id] = order
         self.__client.print(commands)
+        return order_id
 
     @classmethod
     def parse_order(cls, order: Order) -> list[Command]:
