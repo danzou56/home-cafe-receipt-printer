@@ -21,6 +21,7 @@ class PrintService:
     def print(self, order: Order):
         commands = PrintService.parse_order(order)
         self.orders[str(uuid.uuid4())] = order
+        print(orders)
         self.__client.print(commands)
 
     @classmethod
