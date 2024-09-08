@@ -1,5 +1,4 @@
 import logging
-import logging
 import os
 
 from dotenv import load_dotenv
@@ -57,7 +56,7 @@ def order():
 
 @app.route("/orders", methods=["GET"])
 def get_orders():
-    return print_service.orders, 200
+    return [{"orderId": k, "order": v} for k, v in print_service.orders.items()], 200
 
 
 @app.route("/reprint/<id>", methods=["POST"])
