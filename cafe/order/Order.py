@@ -22,5 +22,5 @@ class Order:
         return {
             "name": self.name,
             "timestamp": self.timestamp.isoformat(),
-            "items": self.items.to_dict()
+            "items": tuple(item.to_dict() for item in self.items),
         }
