@@ -59,7 +59,7 @@ def get_orders():
     return [{"orderId": k, "order": v} for k, v in print_service.orders.items()], 200
 
 
-@app.route("/reprint/<id>", methods=["POST"])
+@app.route("/reprint/<order_id>", methods=["POST"])
 def reprint(order_id):
     try:
         print_service.print(order_id)
