@@ -56,4 +56,4 @@ def order():
 
 @app.route("/orders", methods=["GET"])
 def get_orders():
-    return json.dumps(print_service.orders), 200
+    return print_service.orders, 200
