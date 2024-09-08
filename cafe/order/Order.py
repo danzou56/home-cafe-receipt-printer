@@ -17,10 +17,3 @@ class Order:
             datetime.datetime.now(),
             tuple(Item.from_dict(item) for item in data["items"]),
         )
-
-    def to_dict(self) -> dict:
-        return {
-            "name": self.name,
-            "timestamp": self.timestamp.isoformat(),
-            "items": self.items.to_dict()
-        }

@@ -11,7 +11,6 @@ from escpos.printer import Dummy
 from flask import Flask, request
 from flask_cors import CORS
 
-from cafe.order.Item import Item
 from cafe.order.Order import Order
 from cafe.printer.PrintClient import PrintClient
 from cafe.printer.PrintService import PrintService
@@ -62,10 +61,6 @@ def get_orders():
     def default(something: Any) -> Any:
         if isinstance(something, datetime.datetime):
             return something.isoformat()
-        if isinstance(something, Order):
-            return something.to_dict()
-        if isinstance(something, Item):
-            return something.to_dict()
 
         return json.dumps(something)
 
