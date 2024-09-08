@@ -1,13 +1,15 @@
+import datetime
 import json
 import logging
 import os
+from typing import Any
 
 from dotenv import load_dotenv
-from escpos.printer import Dummy
 from escpos.config import Config
 from escpos.escpos import Escpos
+from escpos.printer import Dummy
 from flask import Flask, request
-from flask_cors import cross_origin, CORS
+from flask_cors import CORS
 
 from cafe.order.Order import Order
 from cafe.printer.PrintClient import PrintClient
@@ -56,4 +58,10 @@ def order():
 
 @app.route("/orders", methods=["GET"])
 def get_orders():
-    return json.dumps(print_service.orders), 200
+    def default(something: Any) -> Any:
+        if isinstance(something, datetime.datetime):
+            return something.isoformat()
+
+        return json.dumps(something)
+
+    return json.dumps(print_service.orders, default=default), 200
