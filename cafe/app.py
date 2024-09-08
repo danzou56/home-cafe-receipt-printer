@@ -50,7 +50,8 @@ def order():
     except TypeError as e:
         logger.error(e)
         return "Bad Request", 400
-    order_id = print_service.print(order)
+    order_id = print_service.create_order(order)
+    print_service.print(order_id)
     return order_id, 201
 
 
@@ -62,7 +63,7 @@ def get_orders():
 @app.route("/reprint/<id>", methods=["POST"])
 def reprint(order_id):
     try:
-        print_service.print(print_service.orders.get(order_id))
+        print_service.print(order_id)
     except KeyError as e:
         return "No such order ID", 400
     return order_id, 200

@@ -18,11 +18,14 @@ class PrintService:
     def __init__(self, print_client: PrintClient):
         self.__client = print_client
 
-    def print(self, order: Order) -> str:
+    def print(self, order_id: str):
+        order = self.orders[order_id]
         commands = PrintService.parse_order(order)
+        self.__client.print(commands)
+
+    def create_order(self, order: Order) -> str:
         order_id = str(uuid.uuid4())
         self.orders[order_id] = order
-        self.__client.print(commands)
         return order_id
 
     @classmethod
