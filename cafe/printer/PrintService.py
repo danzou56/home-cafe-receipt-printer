@@ -26,7 +26,7 @@ class PrintService:
                     "** copy **", align="center", double_height=True, double_width=True
                 ),
                 Break(),
-                Break()
+                Break(),
             ]
         else:
             order = PrintService.orders[order_id]
