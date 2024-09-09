@@ -38,6 +38,8 @@ class PrintService:
 
     @classmethod
     def parse_order(cls, order: Order) -> list[Command]:
+        cls._order_number += 1
+
         header = [
             TextLn("allicafei", align="center", double_height=True, double_width=True),
             TextLn(os.getenv("PRIVATE_LINE_1", ""), align="center"),
