@@ -21,11 +21,10 @@ class PrintService:
 
     def print(self, order_id: str):
         if order_id in PrintService._rendered_orders:
-            commands = PrintService._rendered_orders[order_id][:-1] + [
+            commands = PrintService._rendered_orders[order_id] + [
                 TextLn(
                     "** copy **", align="center", double_height=True, double_width=True
                 ),
-                Break(),
                 Break(),
             ]
         else:
@@ -45,7 +44,7 @@ class PrintService:
 
         header = [
             TextLn("allicafei", align="center", double_height=True, double_width=True),
-            TextLn(os.getenv("PRIVATE_LINE_1", ""), align="center"),
+            # TextLn(os.getenv("PRIVATE_LINE_1", ""), align="center"),
             TextLn(os.getenv("PRIVATE_LINE_2", ""), align="center"),
             Break(),
         ]
