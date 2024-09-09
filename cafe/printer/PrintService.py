@@ -14,13 +14,19 @@ from cafe.printer.command.TextLn import TextLn
 class PrintService:
     _order_number = 0
     orders: dict[str, Order] = dict()
+    _rendered_orders: dict[str, list[Command]] = dict()
 
     def __init__(self, print_client: PrintClient):
         self.__client = print_client
 
     def print(self, order_id: str):
-        order = self.orders[order_id]
-        commands = PrintService.parse_order(order)
+        if order_id in PrintService._rendered_orders:
+            commands = PrintService._rendered_orders[order_id] + [
+                TextLn("** copy **", align="center", double_height=True, double_width=True)
+            ]
+        else:
+            order = PrintService.orders[order_id]
+            commands = PrintService.parse_order(order)
         self.__client.print(commands)
 
     def create_order(self, order: Order) -> str:
@@ -30,8 +36,6 @@ class PrintService:
 
     @classmethod
     def parse_order(cls, order: Order) -> list[Command]:
-        cls._order_number += 1
-
         header = [
             TextLn("allicafei", align="center", double_height=True, double_width=True),
             TextLn(os.getenv("PRIVATE_LINE_1", ""), align="center"),
