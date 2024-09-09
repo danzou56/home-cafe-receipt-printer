@@ -21,14 +21,17 @@ class PrintService:
 
     def print(self, order_id: str):
         if order_id in PrintService._rendered_orders:
-            commands = PrintService._rendered_orders[order_id] + [
+            commands = PrintService._rendered_orders[order_id][:-1] + [
                 TextLn(
                     "** copy **", align="center", double_height=True, double_width=True
-                )
+                ),
+                Break(),
+                Break()
             ]
         else:
             order = PrintService.orders[order_id]
             commands = PrintService.parse_order(order)
+            PrintService._rendered_orders[order_id] = commands
         self.__client.print(commands)
 
     def create_order(self, order: Order) -> str:
