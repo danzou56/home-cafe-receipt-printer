@@ -22,7 +22,9 @@ class PrintService:
     def print(self, order_id: str):
         if order_id in PrintService._rendered_orders:
             commands = PrintService._rendered_orders[order_id] + [
-                TextLn("** copy **", align="center", double_height=True, double_width=True)
+                TextLn(
+                    "** copy **", align="center", double_height=True, double_width=True
+                )
             ]
         else:
             order = PrintService.orders[order_id]
