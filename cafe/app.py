@@ -43,10 +43,7 @@ def order():
     try:
         order = Order.from_dict(content)
         logger.info(f"Order: {order}")
-    except KeyError as e:
-        logger.error(e)
-        return "Bad Request", 400
-    except TypeError as e:
+    except KeyError | TypeError as e:
         logger.error(e)
         return "Bad Request", 400
     order_id = print_service.create_order(order)
@@ -64,5 +61,5 @@ def reprint(order_id):
     try:
         print_service.print(order_id)
     except KeyError as e:
-        return "No such order ID", 400
+        return "No such order ID", 404
     return order_id, 200
