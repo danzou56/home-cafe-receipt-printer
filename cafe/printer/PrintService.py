@@ -2,6 +2,7 @@ import collections
 import os
 import uuid
 from functools import reduce
+from itertools import groupby
 
 from cafe.order.Item import Item
 from cafe.order.Order import Order
@@ -31,6 +32,11 @@ class PrintService:
             order = PrintService.orders[order_id]
             commands = PrintService.parse_order(order)
             PrintService._rendered_orders[order_id] = commands
+
+            for type, group in groupby(order.items, lambda i: i.type):
+                grouped_commands = PrintService._parse_top_items(zip(group, [1] * len(group)))
+                self.__client.print(grouped_commands + [Break(), Break()])
+
         self.__client.print(commands)
 
     def create_order(self, order: Order) -> str:
