@@ -11,7 +11,7 @@ def test_parse_order():
         Order(
             name="Foo",
             timestamp=datetime.datetime.now(),
-            items=[Item(name="Bar"), Item(name="Baz")],
+            items=[Item(name="Bar", type="Food"), Item(name="Baz", type="Food")],
         )
     )
 
@@ -25,7 +25,11 @@ def test_parse_order_collect():
         Order(
             name="Foo",
             timestamp=datetime.datetime.now(),
-            items=[Item(name="Bar"), Item(name="Baz"), Item(name="Bar")],
+            items=[
+                Item(name="Bar", type="Food"),
+                Item(name="Baz", type="Food"),
+                Item(name="Bar", type="Food"),
+            ],
         )
     )
 
@@ -42,7 +46,11 @@ def test_parse_order_sub_items():
             items=[
                 Item(
                     name="Bar",
-                    sub_items=(Item(name="Baz"), Item(name="Baz")),
+                    type="Food",
+                    sub_items=(
+                        Item(name="Baz", type="Food"),
+                        Item(name="Baz", type="Food"),
+                    ),
                 )
             ],
         )
@@ -61,12 +69,14 @@ def test_parse_order_sub_sub_items():
             items=[
                 Item(
                     name="Bar",
+                    type="Food",
                     sub_items=(
                         Item(
                             name="Baz",
+                            type="Food",
                             sub_items=(
-                                Item(name="Baz"),
-                                Item(name="Baz"),
+                                Item(name="Baz", type="Food"),
+                                Item(name="Baz", type="Food"),
                             ),
                         ),
                     ),
