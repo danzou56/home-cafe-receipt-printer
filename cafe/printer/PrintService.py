@@ -34,7 +34,9 @@ class PrintService:
             PrintService._rendered_orders[order_id] = commands
 
             for type, group in groupby(order.items, lambda i: i.type):
-                grouped_commands = PrintService._parse_top_items(zip(group, [1] * len(group)))
+                grouped_commands = PrintService._parse_top_items(
+                    zip(group, [1] * len(group))
+                )
                 self.__client.print(grouped_commands + [Break(), Break()])
 
         self.__client.print(commands)
