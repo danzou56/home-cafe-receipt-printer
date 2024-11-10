@@ -1,9 +1,9 @@
 import collections
+import datetime
 import os
 import uuid
 from functools import reduce
 from itertools import groupby
-import datetime
 
 from cafe.order.Item import Item
 from cafe.order.Order import Order
@@ -35,12 +35,15 @@ class PrintService:
             PrintService._rendered_orders[order_id] = commands
 
             for type, group in groupby(order.items, lambda i: i.type):
+                items_in_group = list(group)
                 metadata = PrintService._create_meta(
                     order.name,
                     order_number,
                     order.timestamp,
                 )
-                body = PrintService._parse_top_items(zip(group, [1] * len(group)))
+                body = PrintService._parse_top_items(
+                    zip(items_in_group, [1] * len(items_in_group))
+                )
                 self.__client.print(metadata + body + PrintService._create_footer())
 
         self.__client.print(commands)
