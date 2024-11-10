@@ -46,7 +46,8 @@ class PrintService:
                     order.timestamp,
                 )
                 body = PrintService._parse_top_items(
-                    zip(items_in_group, [1] * len(items_in_group))
+                    zip(items_in_group, [1] * len(items_in_group)),
+                    large_sub_items=True,
                 )
                 self.__client.print(
                     [TextLn(["drink", "food"][int(type)])]
@@ -108,7 +109,7 @@ class PrintService:
         return info + body + footer
 
     @staticmethod
-    def _parse_top_items(items: list[tuple[Item, int]]) -> list[Command]:
+    def _parse_top_items(items: list[tuple[Item, int]], large_sub_items: bool = False) -> list[Command]:
         return reduce(
             list.__add__,
             [
@@ -119,22 +120,22 @@ class PrintService:
                         double_width=True,
                     )
                 ]
-                + PrintService._parse_items(item.sub_items, 1)
+                + PrintService._parse_items(item.sub_items, 1, large=large_sub_items)
                 for (item, quantity) in items
             ],
             [],
         )
 
     @staticmethod
-    def _parse_items(items: tuple[Item, ...], indentation: int = 0) -> list[Command]:
+    def _parse_items(items: tuple[Item, ...], indentation: int = 0, large: bool = False) -> list[Command]:
         return reduce(
             list.__add__,
             [
                 [
                     TextLn(
                         f"{'\t' * indentation}{item.name}",
-                        double_height=True,
-                        double_width=True,
+                        double_height=large,
+                        double_width=large,
                     )
                 ]
                 + PrintService._parse_items(item.sub_items, indentation + 1)
