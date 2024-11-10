@@ -14,7 +14,7 @@ from cafe.printer.command.TextLn import TextLn
 
 class PrintService:
     _order_number = 0
-    orders: dict[str, Order] = dict()
+    orders: dict[str, tuple[int, Order]] = dict()
     _rendered_orders: dict[str, list[Command]] = dict()
 
     def __init__(self, print_client: PrintClient):
@@ -29,49 +29,71 @@ class PrintService:
                 Break(),
             ]
         else:
-            order = PrintService.orders[order_id]
-            commands = PrintService.parse_order(order)
+            (order_number, order) = PrintService.orders[order_id]
+            commands = PrintService.create_receipt(order)
             PrintService._rendered_orders[order_id] = commands
 
             for type, group in groupby(order.items, lambda i: i.type):
-                grouped_commands = PrintService._parse_top_items(
+                metadata = PrintService._create_meta(
+                    order.name,
+                    order_number,
+                    order.timestamp,
+                )
+                body = PrintService._parse_top_items(
                     zip(group, [1] * len(group))
                 )
-                self.__client.print(grouped_commands + [Break(), Break()])
+                self.__client.print(metadata + body + PrintService._create_footer())
 
         self.__client.print(commands)
 
     def create_order(self, order: Order) -> str:
         order_id = str(uuid.uuid4())
-        self.orders[order_id] = order
+        cls._order_number += 1
+        self.orders[order_id] = (order, cls._order_number)
         return order_id
 
-    @classmethod
-    def parse_order(cls, order: Order) -> list[Command]:
-        cls._order_number += 1
+    @staticmethod
+    def _create_footer() -> list[Command]:
+        return [Break(), Break()]
 
+    @staticmethod
+    def _create_header() -> list[Command]:
         header = [
             TextLn("allicafei", align="center", double_height=True, double_width=True),
             # TextLn(os.getenv("PRIVATE_LINE_1", ""), align="center"),
             TextLn(os.getenv("PRIVATE_LINE_2", ""), align="center"),
             Break(),
         ]
+        return header
+
+    @staticmethod
+    def _create_meta(name: str, order_number: int, timestamp: datetime, with_header: bool=False) -> list[Command]:
+        header = []
+        if with_header:
+            header = PrintService._create_header()
         info = [
             TextLn(
-                f"{order.name.upper()}",
+                f"{name.upper()}",
                 double_height=True,
                 double_width=True,
             ),
             TextLn(
-                f"{order.timestamp.strftime('%m/%d/%Y %I:%M:%S %p')} / #{cls._order_number}"
+                f"{timestamp.strftime('%m/%d/%Y %I:%M:%S %p')} / #{order_number}"
             ),
             Break(),
         ]
+        return header + info
+
+
+    @staticmethod
+    def create_receipt(order: Order, order_number) -> list[Command]:
+        info = PrintService._create_meta(order.name, order_number, order.timestamp, with_header=True)
         body = PrintService._parse_top_items(
             list(collections.Counter(order.items).items())
         )
+        footer = PrintService._create_footer()
 
-        return header + info + body + [Break(), Break()]
+        return header + info + body + footer
 
     @staticmethod
     def _parse_top_items(items: list[tuple[Item, int]]) -> list[Command]:
@@ -96,7 +118,7 @@ class PrintService:
         return reduce(
             list.__add__,
             [
-                [TextLn(f"{'\t' * indentation}{item.name}")]
+                [TextLn(f"{'\t' * indentation}{item.name}", double_height=True, double_width=True)]
                 + PrintService._parse_items(item.sub_items, indentation + 1)
                 for item in items
             ],
