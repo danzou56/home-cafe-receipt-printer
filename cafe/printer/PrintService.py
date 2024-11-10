@@ -35,7 +35,7 @@ class PrintService:
             PrintService._rendered_orders[order_id] = commands
 
             for type, group in groupby(
-                sorted(order.items, key=lambda i: i.type), lambda i: i.type
+                    sorted(order.items, key=lambda i: i.type), lambda i: i.type
             ):
                 if type.lower() == "snack":
                     continue
@@ -76,7 +76,7 @@ class PrintService:
 
     @staticmethod
     def _create_meta(
-        name: str, order_number: int, timestamp: datetime, with_header: bool = False
+            name: str, order_number: int, timestamp: datetime, with_header: bool = False
     ) -> list[Command]:
         header = []
         if with_header:
