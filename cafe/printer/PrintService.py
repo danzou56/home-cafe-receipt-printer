@@ -49,7 +49,7 @@ class PrintService:
                     zip(items_in_group, [1] * len(items_in_group))
                 )
                 self.__client.print(
-                    [TextLn(["food", "drink"][type])]
+                    [TextLn(["food", "drink"][int(type)])]
                     + metadata
                     + body
                     + PrintService._create_footer()
