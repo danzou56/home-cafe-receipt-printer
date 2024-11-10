@@ -6,8 +6,8 @@ from cafe.printer.PrintService import PrintService
 from cafe.printer.command.TextLn import TextLn
 
 
-def test_parse_order():
-    commands = PrintService.parse_order(
+def test_create_receipt():
+    commands = PrintService.create_receipt(
         Order(
             name="Foo",
             timestamp=datetime.datetime.now(),
@@ -20,8 +20,8 @@ def test_parse_order():
     assert "1 x  Bar" in text_lns
 
 
-def test_parse_order_collect():
-    commands = PrintService.parse_order(
+def test_create_receipt_collect():
+    commands = PrintService.create_receipt(
         Order(
             name="Foo",
             timestamp=datetime.datetime.now(),
@@ -38,8 +38,8 @@ def test_parse_order_collect():
     assert "2 x  Bar" in text_lns
 
 
-def test_parse_order_sub_items():
-    commands = PrintService.parse_order(
+def test_create_receipt_sub_items():
+    commands = PrintService.create_receipt(
         Order(
             name="Foo",
             timestamp=datetime.datetime.now(),
@@ -61,8 +61,8 @@ def test_parse_order_sub_items():
     assert text_lns.count("\tBaz") == 2
 
 
-def test_parse_order_sub_sub_items():
-    commands = PrintService.parse_order(
+def test_create_receipt_sub_sub_items():
+    commands = PrintService.create_receipt(
         Order(
             name="Foo",
             timestamp=datetime.datetime.now(),
