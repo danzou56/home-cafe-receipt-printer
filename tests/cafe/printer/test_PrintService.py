@@ -11,8 +11,9 @@ def test_create_receipt():
         Order(
             name="Foo",
             timestamp=datetime.datetime.now(),
-            items=[Item(name="Bar", type="Food"), Item(name="Baz", type="Food")],
-        )
+            items=(Item(name="Bar", type="Food"), Item(name="Baz", type="Food")),
+        ),
+        0,
     )
 
     text_lns = [command.text for command in commands if isinstance(command, TextLn)]
@@ -25,12 +26,13 @@ def test_create_receipt_collect():
         Order(
             name="Foo",
             timestamp=datetime.datetime.now(),
-            items=[
+            items=(
                 Item(name="Bar", type="Food"),
                 Item(name="Baz", type="Food"),
                 Item(name="Bar", type="Food"),
-            ],
-        )
+            ),
+        ),
+        0,
     )
 
     text_lns = [command.text for command in commands if isinstance(command, TextLn)]
@@ -43,7 +45,7 @@ def test_create_receipt_sub_items():
         Order(
             name="Foo",
             timestamp=datetime.datetime.now(),
-            items=[
+            items=(
                 Item(
                     name="Bar",
                     type="Food",
@@ -51,9 +53,10 @@ def test_create_receipt_sub_items():
                         Item(name="Baz", type="Food"),
                         Item(name="Baz", type="Food"),
                     ),
-                )
-            ],
-        )
+                ),
+            ),
+        ),
+        0,
     )
 
     text_lns = [command.text for command in commands if isinstance(command, TextLn)]
@@ -66,7 +69,7 @@ def test_create_receipt_sub_sub_items():
         Order(
             name="Foo",
             timestamp=datetime.datetime.now(),
-            items=[
+            items=(
                 Item(
                     name="Bar",
                     type="Food",
@@ -80,9 +83,10 @@ def test_create_receipt_sub_sub_items():
                             ),
                         ),
                     ),
-                )
-            ],
-        )
+                ),
+            ),
+        ),
+        0,
     )
 
     text_lns = [command.text for command in commands if isinstance(command, TextLn)]

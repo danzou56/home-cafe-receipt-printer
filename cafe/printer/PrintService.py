@@ -3,6 +3,7 @@ import os
 import uuid
 from functools import reduce
 from itertools import groupby
+import datetime
 
 from cafe.order.Item import Item
 from cafe.order.Order import Order
@@ -39,17 +40,15 @@ class PrintService:
                     order_number,
                     order.timestamp,
                 )
-                body = PrintService._parse_top_items(
-                    zip(group, [1] * len(group))
-                )
+                body = PrintService._parse_top_items(zip(group, [1] * len(group)))
                 self.__client.print(metadata + body + PrintService._create_footer())
 
         self.__client.print(commands)
 
     def create_order(self, order: Order) -> str:
         order_id = str(uuid.uuid4())
-        cls._order_number += 1
-        self.orders[order_id] = (order, cls._order_number)
+        self._order_number += 1
+        self.orders[order_id] = (self._order_number, order)
         return order_id
 
     @staticmethod
@@ -67,7 +66,9 @@ class PrintService:
         return header
 
     @staticmethod
-    def _create_meta(name: str, order_number: int, timestamp: datetime, with_header: bool=False) -> list[Command]:
+    def _create_meta(
+        name: str, order_number: int, timestamp: datetime, with_header: bool = False
+    ) -> list[Command]:
         header = []
         if with_header:
             header = PrintService._create_header()
@@ -77,23 +78,22 @@ class PrintService:
                 double_height=True,
                 double_width=True,
             ),
-            TextLn(
-                f"{timestamp.strftime('%m/%d/%Y %I:%M:%S %p')} / #{order_number}"
-            ),
+            TextLn(f"{timestamp.strftime('%m/%d/%Y %I:%M:%S %p')} / #{order_number}"),
             Break(),
         ]
         return header + info
 
-
     @staticmethod
     def create_receipt(order: Order, order_number) -> list[Command]:
-        info = PrintService._create_meta(order.name, order_number, order.timestamp, with_header=True)
+        info = PrintService._create_meta(
+            order.name, order_number, order.timestamp, with_header=True
+        )
         body = PrintService._parse_top_items(
             list(collections.Counter(order.items).items())
         )
         footer = PrintService._create_footer()
 
-        return header + info + body + footer
+        return info + body + footer
 
     @staticmethod
     def _parse_top_items(items: list[tuple[Item, int]]) -> list[Command]:
@@ -118,7 +118,13 @@ class PrintService:
         return reduce(
             list.__add__,
             [
-                [TextLn(f"{'\t' * indentation}{item.name}", double_height=True, double_width=True)]
+                [
+                    TextLn(
+                        f"{'\t' * indentation}{item.name}",
+                        double_height=True,
+                        double_width=True,
+                    )
+                ]
                 + PrintService._parse_items(item.sub_items, indentation + 1)
                 for item in items
             ],
