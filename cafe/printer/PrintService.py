@@ -109,7 +109,9 @@ class PrintService:
         return info + body + footer
 
     @staticmethod
-    def _parse_top_items(items: list[tuple[Item, int]], large_sub_items: bool = False) -> list[Command]:
+    def _parse_top_items(
+        items: list[tuple[Item, int]], large_sub_items: bool = False
+    ) -> list[Command]:
         return reduce(
             list.__add__,
             [
@@ -127,7 +129,9 @@ class PrintService:
         )
 
     @staticmethod
-    def _parse_items(items: tuple[Item, ...], indentation: int = 0, large: bool = False) -> list[Command]:
+    def _parse_items(
+        items: tuple[Item, ...], indentation: int = 0, large: bool = False
+    ) -> list[Command]:
         return reduce(
             list.__add__,
             [
