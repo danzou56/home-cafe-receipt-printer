@@ -35,7 +35,7 @@ class PrintService:
             PrintService._rendered_orders[order_id] = commands
 
             for type, group in groupby(
-                    sorted(order.items, key=lambda i: i.type), lambda i: i.type
+                sorted(order.items, key=lambda i: i.type), lambda i: i.type
             ):
                 if type.lower() == "2":
                     continue
@@ -49,7 +49,10 @@ class PrintService:
                     zip(items_in_group, [1] * len(items_in_group))
                 )
                 self.__client.print(
-                    [TextLn(["food", "drink"][type])] + metadata + body + PrintService._create_footer()
+                    [TextLn(["food", "drink"][type])]
+                    + metadata
+                    + body
+                    + PrintService._create_footer()
                 )
 
         self.__client.print(commands)
@@ -76,7 +79,7 @@ class PrintService:
 
     @staticmethod
     def _create_meta(
-            name: str, order_number: int, timestamp: datetime, with_header: bool = False
+        name: str, order_number: int, timestamp: datetime, with_header: bool = False
     ) -> list[Command]:
         header = []
         if with_header:
