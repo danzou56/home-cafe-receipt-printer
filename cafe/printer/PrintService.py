@@ -34,7 +34,7 @@ class PrintService:
             commands = PrintService.create_receipt(order, order_number)
             PrintService._rendered_orders[order_id] = commands
 
-            for type, group in groupby(order.items, lambda i: i.type):
+            for type, group in groupby(sorted(order.items, key=lambda i: i.type), lambda i: i.type):
                 items_in_group = list(group)
                 metadata = PrintService._create_meta(
                     order.name,
