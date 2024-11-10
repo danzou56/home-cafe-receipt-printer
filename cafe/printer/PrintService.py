@@ -34,7 +34,11 @@ class PrintService:
             commands = PrintService.create_receipt(order, order_number)
             PrintService._rendered_orders[order_id] = commands
 
-            for type, group in groupby(sorted(order.items, key=lambda i: i.type), lambda i: i.type):
+            for type, group in groupby(
+                    sorted(order.items, key=lambda i: i.type), lambda i: i.type
+            ):
+                if type.lower() == "snack":
+                    continue
                 items_in_group = list(group)
                 metadata = PrintService._create_meta(
                     order.name,
@@ -44,7 +48,10 @@ class PrintService:
                 body = PrintService._parse_top_items(
                     zip(items_in_group, [1] * len(items_in_group))
                 )
-                self.__client.print(metadata + body + PrintService._create_footer())
+                self.__client.print(
+                    [TextLn(type)] +
+                    metadata + body + PrintService._create_footer()
+                )
 
         self.__client.print(commands)
 
@@ -70,7 +77,7 @@ class PrintService:
 
     @staticmethod
     def _create_meta(
-        name: str, order_number: int, timestamp: datetime, with_header: bool = False
+            name: str, order_number: int, timestamp: datetime, with_header: bool = False
     ) -> list[Command]:
         header = []
         if with_header:
