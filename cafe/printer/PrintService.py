@@ -37,7 +37,7 @@ class PrintService:
             for type, group in groupby(
                     sorted(order.items, key=lambda i: i.type), lambda i: i.type
             ):
-                if type.lower() == "snack":
+                if type.lower() == "2":
                     continue
                 items_in_group = list(group)
                 metadata = PrintService._create_meta(
@@ -49,7 +49,7 @@ class PrintService:
                     zip(items_in_group, [1] * len(items_in_group))
                 )
                 self.__client.print(
-                    [TextLn(type)] + metadata + body + PrintService._create_footer()
+                    [TextLn(["food", "drink"][type])] + metadata + body + PrintService._create_footer()
                 )
 
         self.__client.print(commands)
