@@ -31,7 +31,7 @@ class PrintService:
             ]
         else:
             (order_number, order) = PrintService.orders[order_id]
-            commands = PrintService.create_receipt(order)
+            commands = PrintService.create_receipt(order, order_number)
             PrintService._rendered_orders[order_id] = commands
 
             for type, group in groupby(order.items, lambda i: i.type):
