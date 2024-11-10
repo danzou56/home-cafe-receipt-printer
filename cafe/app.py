@@ -53,7 +53,7 @@ def order():
 
 @app.route("/orders", methods=["GET"])
 def get_orders():
-    return [{"orderId": k, "order": v} for k, v in print_service.orders.items()], 200
+    return [{"orderId": k, "order": v} for k, (_, v) in print_service.orders.items()], 200
 
 
 @app.route("/reprint/<order_id>", methods=["POST"])
